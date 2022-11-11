@@ -1,0 +1,12 @@
+<%- include('partials/header') -%>
+
+    <p> current email</p>
+  <pre class="block bg-gray-300 p-4 text-sm overflow-scroll"><%= userEmail %></pre>
+  <form method="post" action="/changeEmail">
+    <label for="newEmail">New Email:</label>
+    <input type="email" id="newEmailId" name="newEmailName">
+    <button type="submit" value = "buttonValue" name="buttonName">Submit</button>
+  </form>
+
+
+<%- include('partials/footer') -%>
