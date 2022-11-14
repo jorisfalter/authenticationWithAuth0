@@ -58,13 +58,15 @@ router.get("/changeemailsucces", requiresAuth(), function (req, res) {
 
 router.post("/changeEmail", requiresAuth(), function (req, res) {
   newEmail = req.body.newEmailName;
-  console.log(newEmail);
+  console.log("this is the new email: " + newEmail);
 
   // it should check if the email already exists
   // where do I get the current users email
+  console.log("this is the old email: " + req.oidc.user.email);
+
   User.findOneAndUpdate(
-    // this is a mock email
-    { email: "abcd@def.com" },
+    { email: req.oidc.user.email },
+    // { email: "joris@testpass.com" },
     { email: newEmail },
     function (err) {
       if (!err) {

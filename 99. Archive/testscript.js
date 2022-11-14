@@ -2,7 +2,7 @@ function create(user, callback) {
   const bcrypt = require("bcrypt");
   const MongoClient = require("mongodb@3.1.4").MongoClient;
   const client = new MongoClient(
-    "mongodb+srv://joristoptal:OyH65Wj2GEiFde69@cluster0.bchijyg.mongodb.net/db-name"
+    "mongodb+srv://joristoptal:<key>@cluster0.bchijyg.mongodb.net/db-name"
   );
 
   client.connect(function (err) {
