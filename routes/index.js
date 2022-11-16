@@ -30,6 +30,31 @@ const User = mongoose.model("User", usersSchema);
 
 ////////////////////////////////////////////
 // apis
+router.get("/admin", function (req, res) {
+  // console.log(req.oidc.user);
+  User.findOne({ email: req.oidc.user.email }, function (err, user) {
+    console.log(user);
+    console.log(user._id);
+    console.log(user.toObject().connection);
+    // console.log(keys(user));
+    // console.log(values(user));
+
+    // if (err) {
+    //   console.log(err);
+    // } else {
+    //   if (user.permissionLevel === "Admin") {
+    //     res.render("admin", {
+    //       userProfile: JSON.stringify(req.oidc.user, null, 2),
+    //       title: "Admin page",
+    //     });
+    //   } else {
+    //     res.status(401);
+    //     console.log("no access");
+    //   }
+    // }
+  });
+});
+
 router.get("/", function (req, res, next) {
   res.render("index", {
     title: "Joris Super App",
@@ -61,12 +86,10 @@ router.post("/changeEmail", requiresAuth(), function (req, res) {
   console.log("this is the new email: " + newEmail);
 
   // it should check if the email already exists
-  // where do I get the current users email
   console.log("this is the old email: " + req.oidc.user.email);
 
   User.findOneAndUpdate(
     { email: req.oidc.user.email },
-    // { email: "joris@testpass.com" },
     { email: newEmail },
     function (err) {
       if (!err) {
