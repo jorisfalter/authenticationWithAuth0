@@ -35,23 +35,24 @@ router.get("/admin", function (req, res) {
   User.findOne({ email: req.oidc.user.email }, function (err, user) {
     console.log(user);
     console.log(user._id);
-    console.log(user.toObject().connection);
+    console.log(user.toObject().permissionLevel);
     // console.log(keys(user));
     // console.log(values(user));
 
-    // if (err) {
-    //   console.log(err);
-    // } else {
-    //   if (user.permissionLevel === "Admin") {
-    //     res.render("admin", {
-    //       userProfile: JSON.stringify(req.oidc.user, null, 2),
-    //       title: "Admin page",
-    //     });
-    //   } else {
-    //     res.status(401);
-    //     console.log("no access");
-    //   }
-    // }
+    if (err) {
+      console.log(err);
+    } else {
+      if (user.toObject().permissionLevel === "Admin") {
+        res.render("admin", {
+          userProfile: JSON.stringify(req.oidc.user, null, 2),
+          title: "Admin page",
+        });
+      } else {
+        res.status(401);
+        console.log("no access");
+        res.render("fouroone");
+      }
+    }
   });
 });
 
