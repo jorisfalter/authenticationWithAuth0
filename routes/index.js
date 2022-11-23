@@ -28,17 +28,10 @@ const usersSchema = new mongoose.Schema({
 });
 const User = mongoose.model("User", usersSchema);
 
-////////////////////////////////////////////
-// apis
+//////// admin apis ////////
 router.get("/admin", function (req, res) {
-  // console.log(req.oidc.user);
+  // check if user is admin
   User.findOne({ email: req.oidc.user.email }, function (err, user) {
-    console.log(user);
-    console.log(user._id);
-    console.log(user.toObject().permissionLevel);
-    // console.log(keys(user));
-    // console.log(values(user));
-
     if (err) {
       console.log(err);
     } else {
@@ -49,6 +42,7 @@ router.get("/admin", function (req, res) {
         });
       } else {
         res.status(401);
+        //console.log(res.statusCode);
         console.log("no access");
         res.render("fouroone");
       }
@@ -56,6 +50,48 @@ router.get("/admin", function (req, res) {
   });
 });
 
+// do we need to do both of these in postman?
+// then my admin flag won't work. > I'm digging myself in more and more
+
+// list all users in the browser
+router.get("/allusers", function (req, res) {
+  // check if user is admin
+  User.findOne({ email: req.oidc.user.email }, function (err, user) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (user.toObject().permissionLevel === "Admin") {
+        // fetch mongoose data
+        User.find({}, function (err, users) {
+          var userMap = {};
+          var userList = [];
+          var counter = 0;
+          users.forEach(function (user) {
+            userMap[user.email] = user;
+            userList[counter] = user.email;
+            counter++;
+          });
+          console.log(userList);
+          res.render("allusers", { userList: userList });
+          // res.send(userMap);
+        });
+      } else {
+        res.status(401);
+        //console.log(res.statusCode);
+        console.log("no access");
+        res.render("fouroone");
+      }
+    }
+  });
+});
+
+// see users' activity
+//// login / logout > from auth0
+//// password reset > from auth0
+//// confirmation email > from auth0
+//// profile update > from my own db > i don't have this functionality yet
+
+//////// client apis ////////
 router.get("/", function (req, res, next) {
   res.render("index", {
     title: "Joris Super App",

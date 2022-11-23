@@ -1,0 +1,13 @@
+<%- include('partials/header') -%>
+
+  <h1 class="text-4xl mb-4">These are all Users </h1>
+
+
+  <% userList.forEach(function(individualItem){ %>
+
+        <p><%=  individualItem  %>  </p>
+
+<%  }) %>
+
+
+<%- include('partials/footer') -%>
