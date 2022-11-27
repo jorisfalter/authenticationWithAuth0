@@ -2,6 +2,7 @@
 
 require("dotenv").config();
 var router = require("express").Router();
+var axios = require("axios").default;
 const { requiresAuth } = require("express-openid-connect");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -50,9 +51,6 @@ router.get("/admin", function (req, res) {
   });
 });
 
-// do we need to do both of these in postman?
-// then my admin flag won't work. > I'm digging myself in more and more
-
 // list all users in the browser
 router.get("/allusers", function (req, res) {
   // check if user is admin
@@ -62,19 +60,37 @@ router.get("/allusers", function (req, res) {
     } else {
       if (user.toObject().permissionLevel === "Admin") {
         // fetch mongoose data
-        User.find({}, function (err, users) {
-          var userMap = {};
-          var userList = [];
-          var counter = 0;
-          users.forEach(function (user) {
-            userMap[user.email] = user;
-            userList[counter] = user.email;
-            counter++;
+        // User.find({}, function (err, users) {
+        //   var userMap = {};
+        //   var userList = [];
+        //   var counter = 0;
+        //   users.forEach(function (user) {
+        //     userMap[user.email] = user;
+        //     userList[counter] = user.email;
+        //     counter++;
+        //   });
+        //   console.log(userList);
+        //   res.render("allusers", { userList: userList });
+        //   // res.send(userMap);
+        // });
+
+        // fetch auth0 db user data
+
+        var options = {
+          method: "GET",
+          url: "https://dev-8t8sluw6k3s51r4r.us.auth0.com/api/v2/users",
+          params: { search_engine: "v3" },
+          headers: { authorization: "Bearer {yourMgmtApiAccessToken}" },
+        };
+
+        axios
+          .request(options)
+          .then(function (response) {
+            console.log(response.data);
+          })
+          .catch(function (error) {
+            console.error(error);
           });
-          console.log(userList);
-          res.render("allusers", { userList: userList });
-          // res.send(userMap);
-        });
       } else {
         res.status(401);
         //console.log(res.statusCode);
