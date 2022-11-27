@@ -60,37 +60,35 @@ router.get("/allusers", function (req, res) {
     } else {
       if (user.toObject().permissionLevel === "Admin") {
         // fetch mongoose data
-        // User.find({}, function (err, users) {
-        //   var userMap = {};
-        //   var userList = [];
-        //   var counter = 0;
-        //   users.forEach(function (user) {
-        //     userMap[user.email] = user;
-        //     userList[counter] = user.email;
-        //     counter++;
-        //   });
-        //   console.log(userList);
-        //   res.render("allusers", { userList: userList });
-        //   // res.send(userMap);
-        // });
-
-        // fetch auth0 db user data
-
-        var options = {
-          method: "GET",
-          url: "https://dev-8t8sluw6k3s51r4r.us.auth0.com/api/v2/users",
-          params: { search_engine: "v3" },
-          headers: { authorization: "Bearer {yourMgmtApiAccessToken}" },
-        };
-
-        axios
-          .request(options)
-          .then(function (response) {
-            console.log(response.data);
-          })
-          .catch(function (error) {
-            console.error(error);
+        User.find({}, function (err, users) {
+          var userMap = {};
+          var userList = [];
+          var counter = 0;
+          users.forEach(function (user) {
+            userMap[user.email] = user;
+            userList[counter] = user.email;
+            counter++;
           });
+          console.log(userList);
+          res.render("allusers", { userList: userList });
+          // res.send(userMap);
+        });
+        // fetch auth0 db user data  >not functinoal
+        // https://auth0.com/docs/manage-users/user-search/retrieve-users-with-get-users-endpoint
+        // var options = {
+        //   method: "GET",
+        //   url: "https://dev-8t8sluw6k3s51r4r.us.auth0.com/api/v2/users",
+        //   params: { search_engine: "v3" },
+        //   headers: { authorization: "Bearer {yourMgmtApiAccessToken}" },
+        // };
+        // axios
+        //   .request(options)
+        //   .then(function (response) {
+        //     console.log(response.data);
+        //   })
+        //   .catch(function (error) {
+        //     console.error(error);
+        //   });
       } else {
         res.status(401);
         //console.log(res.statusCode);
