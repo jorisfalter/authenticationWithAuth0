@@ -2,6 +2,8 @@
 
 Authentication with Auth0 and Node
 
+Archived after session with Marcos end of November 2022
+
 ##################################
 
 # Documentation from template
